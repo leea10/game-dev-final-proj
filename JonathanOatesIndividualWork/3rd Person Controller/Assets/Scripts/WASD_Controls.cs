@@ -21,6 +21,8 @@ public class WASD_Controls : MonoBehaviour {
 	public Object t;
 	private int i = 0;
 
+	public GameObject audioSphere;
+
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
@@ -47,7 +49,7 @@ public class WASD_Controls : MonoBehaviour {
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
 			startingPositionX = Input.mousePosition.x;
-		}
+		} /*
 		//Strafe Left and Strafe Right Controls
 		if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)) {
 			Vector3 temp_v3 = rb.velocity;
@@ -67,7 +69,7 @@ public class WASD_Controls : MonoBehaviour {
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
 			startingPositionX = Input.mousePosition.x;
-		}
+		} */
 		//Deceleration on No Input
 		if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)) {
 			Vector3 temp_v3 = rb.velocity;
@@ -108,7 +110,9 @@ public class WASD_Controls : MonoBehaviour {
 		}
 
 
-		transform.eulerAngles = new Vector3(0, yaw, 0.0f);
+		cameraBase.eulerAngles = new Vector3(0, yaw, 0.0f);
+
+		audioSphere.transform.localScale = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
 	}
 
 	void FixedUpdate () {
