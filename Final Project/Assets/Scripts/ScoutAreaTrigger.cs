@@ -5,6 +5,8 @@ public class ScoutAreaTrigger : MonoBehaviour {
 	public string areaName;
 	
 	void OnTriggerEnter(Collider other) {
-		Debug.Log (areaName);
+		if (other.gameObject.name == "PlayerModel") {
+			Debug.Log ("Player collided with " + areaName);
+		}
 	}
 }
