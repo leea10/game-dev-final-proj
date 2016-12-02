@@ -1,6 +1,5 @@
 ﻿Player character:
 
-
 * White
 * Male (20’s - 30’s?)
 * Abolitionist
@@ -9,7 +8,6 @@
 
 
 Newspaper_Headlines:
-
 
 * Night_1:
    * Start: Tensions Between the Union and Confederacy at a Breaking Point!
@@ -26,10 +24,11 @@ Newspaper_Headlines:
 
 
 Newspaper_Filler:
+
 * Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis maximus consequat ipsum. Quisque eget ligula aliquet, mollis orci id, malesuada sem. Nullam turpis justo, dignissim eget magna eu, fringilla gravida dolor. Sed congue nisl nec tempor lobortis. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut eu leo arcu. Nunc auctor mi non hendrerit mattis. Donec dui odio, mollis et augue a, elementum aliquet nunc. Curabitur eget orci ac risus facilisis lobortis dapibus at elit. Pellentesque interdum egestas diam. Pellentesque tortor felis, imperdiet id arcu in, ultricies congue metus.
 Ut interdum ultrices sem, ac gravida massa varius eu. Etiam eu nunc sit amet eros vulputate egestas. Proin vitae massa molestie, laoreet nunc luctus, lacinia libero. Nulla vel diam sit amet purus tempus fermentum. Nam efficitur cursus interdum. Nunc sit amet gravida sem. Sed id est non ipsum accumsan elementum. Proin euismod commodo odio sed blandit.
-Mission_Parameters:
 
+Mission_Parameters:
 
    * Night_1:
    * Scout out the path (exploration for hotspots) then make a map for escaped slaves to read
@@ -43,13 +42,15 @@ Mission_Parameters:
 
 Dialogue_With_Slave_Catchers:
 
-
    * Persuasion_1:
+   
    * Slave Catcher: “You there, why are you sulking around?”
    * Player: “Just out for a walk. Couldn’t really sleep, got a new baby back home, y’know?”
    * Success - SC: “Ah, I know what you mean. But you should head back home, don’t want to get caught up in any trouble tonight.”
    * Failure - SC: “Do you think I’m an idiot? I know you don’t have children.”
+   
    * Persuasion_2:
+   
    * Slave Catcher: “Stop right there! What are you doing out here so late?”
    * Player: “Figured I’d sit by the river and relax.”
    * Success - SC: “It is a beautiful night out. Just be careful, yeah? There might be slaves milling about.”
@@ -57,6 +58,7 @@ Dialogue_With_Slave_Catchers:
 
 
    * Bribe_1:
+   
    * SC: “You! What are you doing out here?”
    * P: “I’m enjoying the night sky.”
    * SC: “I’m no idiot. I don’t believe you.”
@@ -64,7 +66,9 @@ Dialogue_With_Slave_Catchers:
    * [Player gives x amount of money]
    * Success - SC: “Just get moving.”
    * Failure - SC: “Get that out of my face! You’re coming with me.”
+   
    * Bribe_2:
+   
    * SC: “Where do you think you’re going, boy?”
    * P: “Who, me? I’m not going anywhere in particular.”
    * SC: “Like I’m gonna believe that? I can see it no your face, you got slaves with ya.”
@@ -75,7 +79,6 @@ Dialogue_With_Slave_Catchers:
 
 
 Storytelling Through Environment (Stretch):
-
 
    * Tracks from nights before (not dynamic)
    * Underground Railroad signs on trees
