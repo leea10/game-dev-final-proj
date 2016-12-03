@@ -9,11 +9,11 @@ public class ScoutArea : MonoBehaviour {
 
 	void OnTriggerEnter(Collider other) {
 		if (other.gameObject.name == "PlayerModel") {
-			Debug.Log ("Player collided with " + areaName);
+			Debug.Log ("[ScoutArea OnPlayerCollide] Player collided with " + areaName);
 			if (OnPlayerCollide != null) {
 				OnPlayerCollide (areaName);
 			} else {
-				Debug.Log ("No event delegates yet!");
+				Debug.Log ("[ScoutArea OnPlayerCollide] No event delegates!");
 			}
 		}
 	}
