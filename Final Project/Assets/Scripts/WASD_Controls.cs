@@ -4,13 +4,15 @@ using System.Collections;
 public class WASD_Controls : MonoBehaviour {
 
 	public Transform cameraBase;
+	public GameObject playerModel;
+	public GameObject compassFollow;
 	public float moveSpeed = 1.0f;
 	public float moveAccellerationTime = 1.0f;
 	public float rotationDampener = 3.0f;
 	public float dragCoefficient = 10.0f;
 	Rigidbody rb;
 	float acceleration_modifer;
-
+	float previous_y_rotation;
 
 	float startingPositionX;
 	float startingRotationY;
@@ -31,6 +33,7 @@ public class WASD_Controls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		previous_y_rotation = transform.localEulerAngles.y;
 	}
 	
 	// Update is called once per frame
@@ -48,7 +51,10 @@ public class WASD_Controls : MonoBehaviour {
 			}
 
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			playerModel.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			compassFollow.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
+
 			startingPositionX = Input.mousePosition.x;
 		} else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) {
 			Vector3 temp_v3 = rb.velocity;
@@ -62,7 +68,10 @@ public class WASD_Controls : MonoBehaviour {
 			}
 
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			playerModel.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			compassFollow.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
+
 			startingPositionX = Input.mousePosition.x;
 		} else {
 			Vector3 temp_v3 = rb.velocity;
@@ -104,6 +113,11 @@ public class WASD_Controls : MonoBehaviour {
 		audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
 		Light light_component = audioLight.GetComponent<Light>();
 		light_component.spotAngle = ((xz_magnitude)/moveSpeed) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
+
+		playerModel.transform.localEulerAngles = new Vector3(playerModel.transform.localEulerAngles.x,
+			Mathf.LerpAngle(playerModel.transform.localEulerAngles.y, 0.0f, Time.deltaTime * 10),
+			playerModel.transform.localEulerAngles.z);
+		
 	}
 
 	void FixedUpdate () {
