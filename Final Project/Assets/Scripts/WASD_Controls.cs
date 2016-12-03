@@ -26,9 +26,17 @@ public class WASD_Controls : MonoBehaviour {
 	public Object t;
 
 	public GameObject audioSphere;
-	public GameObject audioLight;
-	public float minimumLightAngle;
-	public float maximumLightAngle;
+	public GameObject audioSpotlight;
+	public float minimumLightHeight = -0.68f;
+	public float maximumLightHeight = 0.70f;
+	public float minimumLightIntensity = 1.0f;
+	public float maximumLightIntensity = 5.0f;
+	public float minimumLightAngle = 90.0f;
+	public float maximumLightAngle = 120.0f;
+	public GameObject audioPointlight;
+	public float minimumPointIntensity = 0.5f;
+	public float maximumPointIntensity = 1.35f;
+	float maximum_xz_magnitude = 5f;
 
 	// Use this for initialization
 	void Start () {
@@ -109,11 +117,21 @@ public class WASD_Controls : MonoBehaviour {
 		cameraBase.eulerAngles = new Vector3(pitch, yaw, 0.0f);
 
 		float xz_magnitude = Mathf.Pow(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2), 0.5f);
+		if (xz_magnitude > maximum_xz_magnitude) {
+			maximum_xz_magnitude = xz_magnitude;
+		}
+		audioSpotlight.transform.position = new Vector3(transform.position.x,
+			transform.position.y + ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightHeight-minimumLightHeight) + minimumLightHeight,
+			transform.position.z);
+
 		//audioSphere.transform.localScale = new Vector3(xz_magnitude, xz_magnitude, xz_magnitude);
 		audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-		Light light_component = audioLight.GetComponent<Light>();
-		light_component.spotAngle = ((xz_magnitude)/moveSpeed) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
+		Light light_component = audioSpotlight.GetComponent<Light>();
+		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightIntensity-minimumLightIntensity) + minimumLightIntensity;
+		light_component.spotAngle = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
 
+		light_component = audioPointlight.GetComponent<Light>();
+		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumPointIntensity-minimumPointIntensity) + minimumLightIntensity;
 		playerModel.transform.localEulerAngles = new Vector3(playerModel.transform.localEulerAngles.x,
 			Mathf.LerpAngle(playerModel.transform.localEulerAngles.y, 0.0f, Time.deltaTime * 10),
 			playerModel.transform.localEulerAngles.z);
