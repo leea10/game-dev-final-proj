@@ -4,13 +4,15 @@ using System.Collections;
 public class WASD_Controls : MonoBehaviour {
 
 	public Transform cameraBase;
+	public GameObject playerModel;
+	public GameObject compassFollow;
 	public float moveSpeed = 1.0f;
 	public float moveAccellerationTime = 1.0f;
 	public float rotationDampener = 3.0f;
 	public float dragCoefficient = 10.0f;
 	Rigidbody rb;
 	float acceleration_modifer;
-
+	float previous_y_rotation;
 
 	float startingPositionX;
 	float startingRotationY;
@@ -24,13 +26,22 @@ public class WASD_Controls : MonoBehaviour {
 	public Object t;
 
 	public GameObject audioSphere;
-	public GameObject audioLight;
-	public float minimumLightAngle;
-	public float maximumLightAngle;
+	public GameObject audioSpotlight;
+	public float minimumLightHeight = -0.68f;
+	public float maximumLightHeight = 0.70f;
+	public float minimumLightIntensity = 1.0f;
+	public float maximumLightIntensity = 5.0f;
+	public float minimumLightAngle = 90.0f;
+	public float maximumLightAngle = 120.0f;
+	public GameObject audioPointlight;
+	public float minimumPointIntensity = 0.5f;
+	public float maximumPointIntensity = 1.35f;
+	float maximum_xz_magnitude = 5f;
 
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		previous_y_rotation = transform.localEulerAngles.y;
 	}
 	
 	// Update is called once per frame
@@ -48,7 +59,10 @@ public class WASD_Controls : MonoBehaviour {
 			}
 
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			playerModel.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			compassFollow.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
+
 			startingPositionX = Input.mousePosition.x;
 		} else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) {
 			Vector3 temp_v3 = rb.velocity;
@@ -62,7 +76,10 @@ public class WASD_Controls : MonoBehaviour {
 			}
 
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			playerModel.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			compassFollow.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
+
 			startingPositionX = Input.mousePosition.x;
 		} else {
 			Vector3 temp_v3 = rb.velocity;
@@ -100,10 +117,25 @@ public class WASD_Controls : MonoBehaviour {
 		cameraBase.eulerAngles = new Vector3(pitch, yaw, 0.0f);
 
 		float xz_magnitude = Mathf.Pow(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2), 0.5f);
+		if (xz_magnitude > maximum_xz_magnitude) {
+			maximum_xz_magnitude = xz_magnitude;
+		}
+		audioSpotlight.transform.position = new Vector3(transform.position.x,
+			transform.position.y + ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightHeight-minimumLightHeight) + minimumLightHeight,
+			transform.position.z);
+
 		//audioSphere.transform.localScale = new Vector3(xz_magnitude, xz_magnitude, xz_magnitude);
 		audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
-		Light light_component = audioLight.GetComponent<Light>();
-		light_component.spotAngle = ((xz_magnitude)/moveSpeed) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
+		Light light_component = audioSpotlight.GetComponent<Light>();
+		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightIntensity-minimumLightIntensity) + minimumLightIntensity;
+		light_component.spotAngle = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
+
+		light_component = audioPointlight.GetComponent<Light>();
+		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumPointIntensity-minimumPointIntensity) + minimumLightIntensity;
+		playerModel.transform.localEulerAngles = new Vector3(playerModel.transform.localEulerAngles.x,
+			Mathf.LerpAngle(playerModel.transform.localEulerAngles.y, 0.0f, Time.deltaTime * 10),
+			playerModel.transform.localEulerAngles.z);
+		
 	}
 
 	void FixedUpdate () {
