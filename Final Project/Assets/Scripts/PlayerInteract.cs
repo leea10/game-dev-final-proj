@@ -1,19 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerRaycaster : MonoBehaviour {
-	// Event dispatcher for when player comes in or out of reach of an interactable object.
+public class PlayerInteract : MonoBehaviour {
+	// Event dispatchers.
 	// When the player can reach an interactable object.
 	public delegate void ObjectInReachAction(GameObject reachObj);
 	public static ObjectInReachAction OnObjectInReach;
 	// When the player can no longer reach the interactable object.
 	public delegate void ObjectOutReachAction(GameObject reachObj);
 	public static ObjectOutReachAction OnObjectOutReach;
+	// When the player interacts with an object.
+	public delegate void ObjectInteractAction(GameObject reachObj);
+	public static ObjectInteractAction OnObjectInteract;
 
 	// The player's max interact distance.
 	public float interactDistance = 5.0f;
 	// The game object that the player is in reach of, according to the raycast.
 	GameObject reachObj = null;
+
+	void Update() {
+		// Check if the player interacted with an object they can reach.
+		if (Input.GetKeyDown (KeyCode.E) && reachObj != null) {
+			Debug.Log ("[PlayerInteract OnObjectInteract] Player interacted with " + reachObj.name);
+			if (OnObjectInteract != null) {
+				OnObjectInteract (reachObj);
+			} else {
+				Debug.Log ("[PlayerInteract OnObjectInteract] No delegates!");
+			}
+		}
+	}
 
 	void FixedUpdate () {
 		RaycastHit hit;
@@ -26,11 +41,11 @@ public class PlayerRaycaster : MonoBehaviour {
 				if (newReachObj.GetComponent<Interactable> () != null) {
 					// The player is in reach of a new interactable object.
 					reachObj = newReachObj;
-					Debug.Log ("[PlayerRaycaster OnObjectInReach] " + reachObj.name + " came into reach of player");
+					Debug.Log ("[PlayerInteract OnObjectInReach] " + reachObj.name + " came into reach of player");
 					if (OnObjectInReach != null) {
 						OnObjectInReach (reachObj);
 					} else {
-						Debug.Log ("[PlayerRaycaster OnObjectInReach] No delegates!");
+						Debug.Log ("[PlayerInteract OnObjectInReach] No delegates!");
 					}
 				}
 			}
@@ -42,11 +57,11 @@ public class PlayerRaycaster : MonoBehaviour {
 	void unsetReachObj() {
 		if (reachObj != null) {
 			// The player went out of reach from the current object.
-			Debug.Log ("[PlayerRaycaster OnObjectOutReach] " + reachObj.name + " went out of reach from player" );
+			Debug.Log ("[PlayerInteract OnObjectOutReach] " + reachObj.name + " went out of reach from player" );
 			if (OnObjectOutReach != null) {
 				OnObjectOutReach (reachObj);
 			} else {
-				Debug.Log ("[PlayerRaycaster OnObjectOutReach] No delegates!");
+				Debug.Log ("[PlayerInteract OnObjectOutReach] No delegates!");
 			}
 			reachObj = null;
 		}		
