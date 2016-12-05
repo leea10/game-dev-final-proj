@@ -12,7 +12,6 @@ public class WASD_Controls : MonoBehaviour {
 	public float dragCoefficient = 10.0f;
 	Rigidbody rb;
 	float acceleration_modifer;
-	float previous_y_rotation;
 
 	float startingPositionX;
 	float startingRotationY;
@@ -41,7 +40,6 @@ public class WASD_Controls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
-		previous_y_rotation = transform.localEulerAngles.y;
 	}
 	
 	// Update is called once per frame
@@ -125,7 +123,7 @@ public class WASD_Controls : MonoBehaviour {
 			transform.position.z);
 
 		//audioSphere.transform.localScale = new Vector3(xz_magnitude, xz_magnitude, xz_magnitude);
-		audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+		//audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
 		Light light_component = audioSpotlight.GetComponent<Light>();
 		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightIntensity-minimumLightIntensity) + minimumLightIntensity;
 		light_component.spotAngle = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
