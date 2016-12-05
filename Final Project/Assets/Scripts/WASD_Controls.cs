@@ -11,6 +11,7 @@ public class WASD_Controls : MonoBehaviour {
 	public float rotationDampener = 3.0f;
 	public float dragCoefficient = 10.0f;
 	Rigidbody rb;
+	CapsuleCollider cc;
 	float acceleration_modifer;
 
 	float startingPositionX;
@@ -40,6 +41,7 @@ public class WASD_Controls : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
+		cc = GetComponent<CapsuleCollider>();
 	}
 	
 	// Update is called once per frame
@@ -133,6 +135,13 @@ public class WASD_Controls : MonoBehaviour {
 		playerModel.transform.localEulerAngles = new Vector3(playerModel.transform.localEulerAngles.x,
 			Mathf.LerpAngle(playerModel.transform.localEulerAngles.y, 0.0f, Time.deltaTime * 10),
 			playerModel.transform.localEulerAngles.z);
+
+		if (Input.GetKeyDown(KeyCode.LeftShift)) {
+			cc.height = 1.5f;
+		}
+		if (Input.GetKeyUp(KeyCode.LeftShift)) {
+			cc.height = 3.0f;
+		}
 		
 	}
 
