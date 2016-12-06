@@ -1,14 +1,23 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class WASD_Controls : MonoBehaviour {
-
+	SphereCollider sc;
+	public Image img;
+	float opacity=1.0f;
 	public Transform cameraBase;
+	public GameObject playerModel;
+	public GameObject compassFollow;
 	public float moveSpeed = 1.0f;
+	private float ospeed;
+	public float moveAccellerationTime = 1.0f;
 	public float rotationDampener = 3.0f;
 	public float dragCoefficient = 10.0f;
-
 	Rigidbody rb;
+	CapsuleCollider cc;
+	float acceleration_modifer;
+
 	float startingPositionX;
 	float startingRotationY;
 	float startingPositionY;
@@ -16,68 +25,101 @@ public class WASD_Controls : MonoBehaviour {
 	public float speedH = 4.0f;
 	public float speedV = 4.0f;
 	public float sp=0.1f;
-	private float yaw = 0.0f;
-	private float pitch = 0.0f;
+	float yaw = 0.0f;
+	float pitch = 0.0f;
 	public Object t;
-	private int i = 0;
-
+	int testn=1500;
 	public GameObject audioSphere;
+	public GameObject audioSpotlight;
+	public float minimumLightHeight = -0.68f;
+	public float maximumLightHeight = 0.70f;
+	public float minimumLightIntensity = 1.0f;
+	public float maximumLightIntensity = 5.0f;
+	public float minimumLightAngle = 90.0f;
+	public float maximumLightAngle = 120.0f;
+	public GameObject audioPointlight;
+	public float minimumPointIntensity = 0.5f;
+	public float maximumPointIntensity = 1.35f;
+	float maximum_xz_magnitude = 5f;
 
 	// Use this for initialization
 	void Start () {
+		sc=audioSphere.GetComponent<SphereCollider>();
 		rb = GetComponent<Rigidbody>();
+		cc = GetComponent<CapsuleCollider>();
+		ospeed = moveSpeed;
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+		
+		
+		if (Input.GetKey (KeyCode.Space)) {
+			print ("fff");
+			testn -= 50;
+			if (testn > 0) {
+				rb.AddForce (Vector3.up * 5000.0f);
+
+
+			}
+
+
+		} else {
+			testn += 30;
+		}
+		if (testn <= 0) {
+			testn = 0;
+		}
+		if (testn >= 1500) {
+			testn = 1500;
+		}
+
 		//Forward and Backard Controls
 		if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S)) {
 			Vector3 temp_v3 = rb.velocity;
-			temp_v3.z = moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad);
-			temp_v3.x = moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad);
+			temp_v3.z = (moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer);
+			temp_v3.x = (moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer);
 			rb.velocity = temp_v3;
+			if (acceleration_modifer < moveAccellerationTime) {
+				acceleration_modifer += Time.deltaTime;
+				if (acceleration_modifer > moveAccellerationTime)
+					acceleration_modifer = moveAccellerationTime;
+			}
 
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			playerModel.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			compassFollow.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
+
 			startingPositionX = Input.mousePosition.x;
 		} else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) {
 			Vector3 temp_v3 = rb.velocity;
-			temp_v3.z = -1 * moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad);
-			temp_v3.x = -1 * moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad);
+			temp_v3.z = (-1 * moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer); ;
+			temp_v3.x = (-1 * moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer); ;
 			rb.velocity = temp_v3;
+			if (acceleration_modifer < moveAccellerationTime) {
+				acceleration_modifer += Time.deltaTime;
+				if (acceleration_modifer > moveAccellerationTime)
+					acceleration_modifer = moveAccellerationTime;
+			}
 
 			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			playerModel.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
+			compassFollow.transform.localEulerAngles -= new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
 			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
-			startingPositionX = Input.mousePosition.x;
-		} /*
-		//Strafe Left and Strafe Right Controls
-		if (Input.GetKey(KeyCode.A) && !Input.GetKey(KeyCode.D)) {
-			Vector3 temp_v3 = rb.velocity;
-			temp_v3.z = moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad);
-			temp_v3.x = -1 * moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad);
-			rb.velocity = temp_v3;
 
-			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
-			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
 			startingPositionX = Input.mousePosition.x;
-		} else if (Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)) {
-			Vector3 temp_v3 = rb.velocity;
-			temp_v3.z = -1 * moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad);
-			temp_v3.x = moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad);
-			rb.velocity = temp_v3;
-
-			transform.localEulerAngles += new Vector3(0.0f, cameraBase.localEulerAngles.y, 0.0f);
-			cameraBase.localEulerAngles = new Vector3(cameraBase.localEulerAngles.x, 0.0f, 0.0f);
-			startingPositionX = Input.mousePosition.x;
-		} */
-		//Deceleration on No Input
-		if (!Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)) {
+		} else {
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.x /= 1 + (dragCoefficient * Time.deltaTime);
 			temp_v3.z /= 1 + (dragCoefficient * Time.deltaTime);
 			rb.velocity = temp_v3;
+			acceleration_modifer = 0.0f;
 		}
-
+		
 		//Rotation on Mouse Right Click/Hold (does not work while moving)
 		if (Input.GetMouseButtonDown(1)) {
 			startingPositionX = Input.mousePosition.x;
@@ -95,27 +137,55 @@ public class WASD_Controls : MonoBehaviour {
 				cameraBase.localEulerAngles.z);
 		}
 		Screen.lockCursor = true;
-		float spawnDistance = 10;
-
-		Vector3 spawnPos = transform.position + transform.forward*spawnDistance;
-
 
 		yaw += speedH * Input.GetAxis("Mouse X");
 		pitch -= speedV * Input.GetAxis("Mouse Y");
-		if (pitch <= -90) {
-			pitch = -90;
+		if (pitch < -20) {
+			pitch = -20;
+		} else if (pitch > 50) {
+			pitch = 50;
 		}
-		if (pitch >= 90) {
-			pitch = 90;
+		cameraBase.eulerAngles = new Vector3(pitch, yaw, 0.0f);
+
+		float xz_magnitude = Mathf.Pow(Mathf.Pow(rb.velocity.x, 2) + Mathf.Pow(rb.velocity.z, 2), 0.5f);
+		if (xz_magnitude > maximum_xz_magnitude) {
+			maximum_xz_magnitude = xz_magnitude;
 		}
+		audioSpotlight.transform.position = new Vector3(transform.position.x,
+			transform.position.y + ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightHeight-minimumLightHeight) + minimumLightHeight,
+			transform.position.z);
 
+		//audioSphere.transform.localScale = new Vector3(xz_magnitude, xz_magnitude, xz_magnitude);
+		//audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+		Light light_component = audioSpotlight.GetComponent<Light>();
+		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightIntensity-minimumLightIntensity) + minimumLightIntensity;
+		light_component.spotAngle = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
 
-		cameraBase.eulerAngles = new Vector3(0, yaw, 0.0f);
+		light_component = audioPointlight.GetComponent<Light>();
+		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumPointIntensity-minimumPointIntensity) + minimumLightIntensity;
+		playerModel.transform.localEulerAngles = new Vector3(playerModel.transform.localEulerAngles.x,
+			Mathf.LerpAngle(playerModel.transform.localEulerAngles.y, 0.0f, Time.deltaTime * 10),
+			playerModel.transform.localEulerAngles.z);
 
-		audioSphere.transform.localScale = new Vector3(rb.velocity.x, rb.velocity.y, rb.velocity.z);
+		if (Input.GetKeyDown(KeyCode.LeftShift)) {
+			
+			sc.radius -= 0.2f;
+
+			cc.height = 1.5f;
+			moveSpeed = moveSpeed * 0.69f;
+
+		}
+		if (Input.GetKeyUp(KeyCode.LeftShift)) {
+			cc.height = 3.0f;
+			sc.radius = 0.5f;
+			moveSpeed = ospeed;
+
+		}
+		
 	}
 
 	void FixedUpdate () {
 
 	}
 }
+
