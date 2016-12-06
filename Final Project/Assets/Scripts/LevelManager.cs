@@ -15,6 +15,10 @@ public class LevelManager : MonoBehaviour {
 	// (Mapping: Area name -> has been scouted?)
 	Dictionary<string, bool> scoutAreas;
 
+	// The trees to mark in the leve.
+	int totalTrees;
+	int treesMarked = 0;
+
 	void Start () {
 		// Initialize variables.
 		scoutAreas = new Dictionary<string, bool> ();
@@ -27,16 +31,21 @@ public class LevelManager : MonoBehaviour {
 			scoutAreas.Add (areaName, false);
 			Debug.Log ("[LevelManager Init] Player must scout " + areaName);
 		}
+		// Find all trees that need to be marked.
+		totalTrees = GameObject.FindGameObjectsWithTag("landmark").Length;
+		Debug.Log ("[LevelManager Init] Player must mark " + totalTrees + " trees.");
 	}
 
 	void OnEnable () {
 		// Event Listeners.
 		ScoutArea.OnPlayerCollide += ScoutAreaHandler; // Player enters a scout area.
+		Landmark.OnTreeMark += MarkTreeHandler;
 	}
 
 	void OnDisable () {
 		// Stop listening to events.
 		ScoutArea.OnPlayerCollide -= ScoutAreaHandler;
+		Landmark.OnTreeMark -= MarkTreeHandler;
 	}
 
 	// Event handler for when player enters a scout area.
@@ -48,14 +57,19 @@ public class LevelManager : MonoBehaviour {
 			if (OnObjectiveComplete != null) {
 				OnObjectiveComplete (areaName);
 			}
-			// Check if the player has scouted all the areas.
-			if (!scoutAreas.ContainsValue (false)) {
+		}
+	}
+
+	// Event handler for when player marks a tree.
+	void MarkTreeHandler() {
+		treesMarked++;
+		Debug.Log ("[LevelManager OnLandmarkComplete] Player marked tree " + treesMarked + "/" + totalTrees);
+		if (treesMarked == totalTrees) {
+			if (OnLevelComplete != null) {
 				Debug.Log ("[LevelManager OnLevelComplete] Player completed the level");
-				if (OnLevelComplete != null) {
-					OnLevelComplete ();
-				} else {
-					Debug.Log ("[LevelManager OnLevelComplete] No event delegates!");
-				}
+				OnLevelComplete ();
+			} else {
+				Debug.Log ("[LevelManager OnLevelComplete] No event delegates!");
 			}
 		}
 	}
