@@ -23,6 +23,6 @@ public class ScoreDisplay : MonoBehaviour {
 	}
 
 	void UpdateScore(int treesMarked) {
-		score.text = "Trees Marked: " + treesMarked + " / " + total;
+		score.text = "Marks Placed: " + treesMarked + " / " + total;
 	}
 }
