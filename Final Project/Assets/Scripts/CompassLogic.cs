@@ -8,6 +8,7 @@ public class CompassLogic : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		objectives_array = GameObject.FindGameObjectsWithTag("Objective");
+		Landmark.OnTreeMark += UpdateObjectives;
 	}
 	
 	// Update is called once per frame
@@ -35,5 +36,13 @@ public class CompassLogic : MonoBehaviour {
 	void rotate_to_face (Transform target) {
 		transform.LookAt(target);
 		transform.localEulerAngles = new Vector3(0.0f, transform.localEulerAngles.y, 0.0f);
+	}
+
+	void OnDestroy() {
+		Landmark.OnTreeMark -= UpdateObjectives;
+	}
+
+	void UpdateObjectives() {
+		objectives_array = GameObject.FindGameObjectsWithTag("Objective");
 	}
 }
