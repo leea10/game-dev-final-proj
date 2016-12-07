@@ -25,6 +25,7 @@ public class WASD_Controls : MonoBehaviour {
 	float yaw = 0.0f;
 	float pitch = 0.0f;
 	public Object t;
+	public float capsuleShrinkRatio = 0.8f;
 
 	public GameObject audioSphere;
 	public GameObject audioSpotlight;
@@ -146,12 +147,18 @@ public class WASD_Controls : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.LeftShift)) {
 			anim.SetBool ("crouching", true);
-			cc.height = 1.5f;
+			Vector3 center = cc.center;
+			center.y -= (1 - capsuleShrinkRatio) * cc.height / 2;
+			cc.center = center;
+			cc.height *= capsuleShrinkRatio;
 			moveSpeed *= 0.6f;
 		}
 		if (Input.GetKeyUp(KeyCode.LeftShift)) {
 			anim.SetBool ("crouching", false);
-			cc.height = 3.0f;
+			cc.height /= capsuleShrinkRatio;
+			Vector3 center = cc.center;
+			center.y += (1 - capsuleShrinkRatio) * cc.height / 2;
+			cc.center = center;
 			moveSpeed /= 0.6f;
 		}
 		
