@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: 822c8684f63a7ec47b0d1905b45ec928
-timeCreated: 1480995592
+guid: 1905a0e449637f7468a40a8ecc6967a2
+timeCreated: 1481078502
 licenseType: Free
 ModelImporter:
   serializedVersion: 19
@@ -198,7 +198,6 @@ ModelImporter:
     4300012: low-polyMesh
     4300014: eyebrow012Mesh
     4300016: male_worksuit01Mesh
-    7400000: Take 001
     9500000: //RootNode
     13700000: eyebrow012Mesh
     13700002: low-polyMesh
@@ -255,6 +254,7 @@ ModelImporter:
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
+    serializedVersion: 2
     human: []
     skeleton: []
     armTwist: 0.5
@@ -265,7 +265,10 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
