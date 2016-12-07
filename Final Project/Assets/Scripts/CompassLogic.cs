@@ -14,7 +14,11 @@ public class CompassLogic : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		GameObject nearest_objective = get_nearest_objective();
-		rotate_to_face(nearest_objective.transform);
+		if (nearest_objective == null) {
+			gameObject.SetActive (false);
+		} else {
+			rotate_to_face(nearest_objective.transform);
+		}
 	}
 
 	GameObject get_nearest_objective () {
