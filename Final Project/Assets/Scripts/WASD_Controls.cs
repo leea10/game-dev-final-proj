@@ -124,8 +124,8 @@ public class WASD_Controls : MonoBehaviour {
 			transform.position.y + ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightHeight-minimumLightHeight) + minimumLightHeight,
 			transform.position.z);
 
-		//audioSphere.transform.localScale = new Vector3(xz_magnitude, xz_magnitude, xz_magnitude);
-		//audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+		float audioSphere_scale = ((xz_magnitude)/maximum_xz_magnitude) * (7.0f - 3.0f) + 3.0f;
+		audioSphere.transform.localScale = new Vector3(audioSphere_scale, audioSphere_scale, audioSphere_scale);
 		Light light_component = audioSpotlight.GetComponent<Light>();
 		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightIntensity-minimumLightIntensity) + minimumLightIntensity;
 		light_component.spotAngle = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
@@ -138,9 +138,11 @@ public class WASD_Controls : MonoBehaviour {
 
 		if (Input.GetKeyDown(KeyCode.LeftShift)) {
 			cc.height = 1.5f;
+			moveSpeed *= 0.6f;
 		}
 		if (Input.GetKeyUp(KeyCode.LeftShift)) {
 			cc.height = 3.0f;
+			moveSpeed /= 0.6f;
 		}
 		
 	}
