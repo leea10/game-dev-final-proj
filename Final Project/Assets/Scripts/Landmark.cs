@@ -5,11 +5,13 @@ using UnityEngine;
 public class Landmark : MonoBehaviour {
 	public delegate void TreeMark();
 	public static TreeMark OnTreeMark;
+	AudioSource aud;
 
 	public GameObject mark;
 	bool marked = false;
 
 	void Start() {
+		aud = GetComponent<AudioSource> ();
 		mark.SetActive (false);
 	}
 
@@ -23,6 +25,7 @@ public class Landmark : MonoBehaviour {
 
 	void PlayerInteractHandler(GameObject obj) {
 		if(this.gameObject == obj && !marked) {
+			aud.Play ();
 			Debug.Log ("[Landmark OnTreeMark] Tree was marked.");
 			marked = true;
 			gameObject.tag = "Untagged";
