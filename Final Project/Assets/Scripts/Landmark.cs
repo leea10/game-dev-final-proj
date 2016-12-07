@@ -6,7 +6,12 @@ public class Landmark : MonoBehaviour {
 	public delegate void TreeMark();
 	public static TreeMark OnTreeMark;
 
+	public GameObject mark;
 	bool marked = false;
+
+	void Start() {
+		mark.SetActive (false);
+	}
 
 	void OnEnable() {
 		PlayerInteract.OnObjectInteract += PlayerInteractHandler;
@@ -21,6 +26,7 @@ public class Landmark : MonoBehaviour {
 			Debug.Log ("[Landmark OnTreeMark] Tree was marked.");
 			marked = true;
 			gameObject.tag = "Untagged";
+			mark.SetActive (true);
 			if (OnTreeMark != null) {
 				OnTreeMark ();
 			} else {
