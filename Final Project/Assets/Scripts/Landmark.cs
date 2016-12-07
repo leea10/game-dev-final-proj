@@ -20,6 +20,7 @@ public class Landmark : MonoBehaviour {
 		if(this.gameObject == obj && !marked) {
 			Debug.Log ("[Landmark OnTreeMark] Tree was marked.");
 			marked = true;
+			gameObject.tag = "Untagged";
 			if (OnTreeMark != null) {
 				OnTreeMark ();
 			} else {

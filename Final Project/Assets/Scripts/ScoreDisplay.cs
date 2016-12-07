@@ -10,7 +10,7 @@ public class ScoreDisplay : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		score = GetComponent<Text> ();
-		total = GameObject.FindGameObjectsWithTag ("landmark").Length;
+		total = GameObject.FindGameObjectsWithTag ("Objective").Length;
 		UpdateScore (0);
 	}
 	

@@ -34,7 +34,7 @@ public class LevelManager : MonoBehaviour {
 		}
 		*/
 		// Find all trees that need to be marked.
-		totalTrees = GameObject.FindGameObjectsWithTag("landmark").Length;
+		totalTrees = GameObject.FindGameObjectsWithTag("Objective").Length;
 		Debug.Log ("[LevelManager Init] Player must mark " + totalTrees + " trees.");
 	}
 
