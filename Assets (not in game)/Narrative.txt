@@ -9,6 +9,11 @@
 
 Newspaper_Headlines:
 
+* Being_Used:
+   * Start: Slave Escapes at All Time High! Plantation Owners Hire Slave Catchers in Response
+   * End: State Liberated! Slaves and Abolitionists Celebrate!
+
+
 * Night_1:
    * Start: Tensions Between the Union and Confederacy at a Breaking Point!
    * End: Slave Escapes at an All Time High! Plantation Owners Panicked!
@@ -19,7 +24,7 @@ Newspaper_Headlines:
    * Start: Union Soldiers Mobilize to Retake States, Complicated by Fog
    * End: Soldier Foot Traffic Increases on Both Sides
 * Last_Night:
-   * Start: Lincoln Delivers Emancipation Proclamation
+   * Start: Union Soldiers Mobilize to Retake States
    * End: State Liberated! Slaves and Abolitionists Celebrate!
 
 

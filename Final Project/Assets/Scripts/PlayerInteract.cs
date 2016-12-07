@@ -38,7 +38,7 @@ public class PlayerInteract : MonoBehaviour {
 			// Check if the object we can reach is a new object.
 			if (newReachObj != reachObj) {
 				unsetReachObj ();
-				if (newReachObj.CompareTag("Interactable")) {
+				if (newReachObj.CompareTag("Objective")) {
 					// The player is in reach of a new interactable object.
 					reachObj = newReachObj;
 					Debug.Log ("[PlayerInteract OnObjectInReach] " + reachObj.name + " came into reach of player");

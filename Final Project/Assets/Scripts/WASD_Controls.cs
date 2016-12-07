@@ -5,6 +5,7 @@ public class WASD_Controls : MonoBehaviour {
 
 	public Transform cameraBase;
 	public GameObject playerModel;
+	Animator anim;
 	public GameObject compassFollow;
 	public float moveSpeed = 1.0f;
 	public float moveAccellerationTime = 1.0f;
@@ -42,12 +43,15 @@ public class WASD_Controls : MonoBehaviour {
 	void Start () {
 		rb = GetComponent<Rigidbody>();
 		cc = GetComponent<CapsuleCollider>();
+		anim = playerModel.GetComponent<Animator> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		//Forward and Backard Controls
 		if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S)) {
+			anim.SetBool ("walking", true);
+			anim.SetBool ("backwards", false);
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.z = (moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer);
 			temp_v3.x = (moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer);
@@ -65,6 +69,8 @@ public class WASD_Controls : MonoBehaviour {
 
 			startingPositionX = Input.mousePosition.x;
 		} else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) {
+			anim.SetBool ("walking", true);
+			anim.SetBool ("backwards", true);
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.z = (-1 * moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer); ;
 			temp_v3.x = (-1 * moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer); ;
@@ -82,6 +88,8 @@ public class WASD_Controls : MonoBehaviour {
 
 			startingPositionX = Input.mousePosition.x;
 		} else {
+			anim.SetBool ("walking", false);
+			anim.SetBool ("backwards", false);
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.x /= 1 + (dragCoefficient * Time.deltaTime);
 			temp_v3.z /= 1 + (dragCoefficient * Time.deltaTime);
@@ -124,8 +132,8 @@ public class WASD_Controls : MonoBehaviour {
 			transform.position.y + ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightHeight-minimumLightHeight) + minimumLightHeight,
 			transform.position.z);
 
-		//audioSphere.transform.localScale = new Vector3(xz_magnitude, xz_magnitude, xz_magnitude);
-		//audioSphere.transform.localScale = new Vector3(0.0f, 0.0f, 0.0f);
+		float audioSphere_scale = ((xz_magnitude)/maximum_xz_magnitude) * (7.0f - 3.0f) + 3.0f;
+		audioSphere.transform.localScale = new Vector3(audioSphere_scale, audioSphere_scale, audioSphere_scale);
 		Light light_component = audioSpotlight.GetComponent<Light>();
 		light_component.intensity = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightIntensity-minimumLightIntensity) + minimumLightIntensity;
 		light_component.spotAngle = ((xz_magnitude)/maximum_xz_magnitude) * (maximumLightAngle - minimumLightAngle) + minimumLightAngle;
@@ -137,10 +145,14 @@ public class WASD_Controls : MonoBehaviour {
 			playerModel.transform.localEulerAngles.z);
 
 		if (Input.GetKeyDown(KeyCode.LeftShift)) {
+			anim.SetBool ("crouching", true);
 			cc.height = 1.5f;
+			moveSpeed *= 0.6f;
 		}
 		if (Input.GetKeyUp(KeyCode.LeftShift)) {
+			anim.SetBool ("crouching", false);
 			cc.height = 3.0f;
+			moveSpeed /= 0.6f;
 		}
 		
 	}
