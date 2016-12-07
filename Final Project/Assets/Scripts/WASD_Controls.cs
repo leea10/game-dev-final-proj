@@ -40,11 +40,14 @@ public class WASD_Controls : MonoBehaviour {
 	public float maximumPointIntensity = 1.35f;
 	float maximum_xz_magnitude = 5f;
 
+	AudioSource aud;
+
 	// Use this for initialization
 	void Start () {
 		rb = GetComponent<Rigidbody>();
 		cc = GetComponent<CapsuleCollider>();
 		anim = playerModel.GetComponent<Animator> ();
+		aud = GetComponent<AudioSource> ();
 	}
 	
 	// Update is called once per frame
@@ -53,6 +56,7 @@ public class WASD_Controls : MonoBehaviour {
 		if (Input.GetKey(KeyCode.W) && !Input.GetKey(KeyCode.S)) {
 			anim.SetBool ("walking", true);
 			anim.SetBool ("backwards", false);
+			aud.volume = 0.2f;
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.z = (moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer);
 			temp_v3.x = (moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer);
@@ -72,6 +76,7 @@ public class WASD_Controls : MonoBehaviour {
 		} else if (Input.GetKey(KeyCode.S) && !Input.GetKey(KeyCode.W)) {
 			anim.SetBool ("walking", true);
 			anim.SetBool ("backwards", true);
+			aud.volume = 0.8f;
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.z = (-1 * moveSpeed * Mathf.Cos(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer); ;
 			temp_v3.x = (-1 * moveSpeed * Mathf.Sin(transform.localEulerAngles.y * Mathf.Deg2Rad)) / (moveAccellerationTime / acceleration_modifer); ;
@@ -91,6 +96,7 @@ public class WASD_Controls : MonoBehaviour {
 		} else {
 			anim.SetBool ("walking", false);
 			anim.SetBool ("backwards", false);
+			aud.volume = 0.0f;
 			Vector3 temp_v3 = rb.velocity;
 			temp_v3.x /= 1 + (dragCoefficient * Time.deltaTime);
 			temp_v3.z /= 1 + (dragCoefficient * Time.deltaTime);
